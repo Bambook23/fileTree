@@ -52,13 +52,45 @@
 		B59492AC2853341700ACACBD /* FileTree */ = {
 			isa = PBXGroup;
 			children = (
-				B59492AD2853341700ACACBD /* AppDelegate.swift */,
-				B59492B12853341700ACACBD /* ViewController.swift */,
-				B59492B62853341C00ACACBD /* Assets.xcassets */,
-				B59492B82853341C00ACACBD /* LaunchScreen.storyboard */,
-				B59492BB2853341C00ACACBD /* Info.plist */,
+				B59492C1285337C700ACACBD /* App */,
+				B59492C2285337DE00ACACBD /* Screens */,
+				B59492C3285337F200ACACBD /* Resources */,
+				B59492C42853382000ACACBD /* Settings */,
 			);
 			path = FileTree;
+			sourceTree = "<group>";
+		};
+		B59492C1285337C700ACACBD /* App */ = {
+			isa = PBXGroup;
+			children = (
+				B59492AD2853341700ACACBD /* AppDelegate.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		B59492C2285337DE00ACACBD /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				B59492B12853341700ACACBD /* ViewController.swift */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		B59492C3285337F200ACACBD /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B59492B62853341C00ACACBD /* Assets.xcassets */,
+				B59492B82853341C00ACACBD /* LaunchScreen.storyboard */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		B59492C42853382000ACACBD /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				B59492BB2853341C00ACACBD /* Info.plist */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -273,7 +305,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = U26SZQY4T8;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = FileTree/Info.plist;
+				INFOPLIST_FILE = FileTree/Settings/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "";
@@ -301,7 +333,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = U26SZQY4T8;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = FileTree/Info.plist;
+				INFOPLIST_FILE = FileTree/Settings/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "";
