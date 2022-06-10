@@ -17,6 +17,8 @@ final class FileTreeController: UIViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    view().collectionView.delegate = self
+    view().collectionView.dataSource = self
   }
 
 }
@@ -25,6 +27,19 @@ extension FileTreeController {
 
   private func view() -> FileTreeControllerView {
     view as! FileTreeControllerView
+  }
+
+}
+
+extension FileTreeController: UICollectionViewDataSource, UICollectionViewDelegate {
+
+  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    30
+  }
+
+  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "gridLayoutCell", for: indexPath)
+    return cell
   }
 
 }

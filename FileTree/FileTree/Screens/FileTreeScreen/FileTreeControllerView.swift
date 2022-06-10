@@ -12,11 +12,12 @@ final class FileTreeControllerView: UIView {
   let collectionView: UICollectionView = {
     let gridLayout = UICollectionViewFlowLayout()
     gridLayout.scrollDirection = .vertical
-    gridLayout.itemSize = CGSize(width: 30, height: 30)
+    gridLayout.itemSize = CGSize(width: 120, height: 150)
 
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: gridLayout)
     collectionView.showsVerticalScrollIndicator = false
     collectionView.translatesAutoresizingMaskIntoConstraints = false
+    collectionView.register(CollectionViewGridLayoutCell.self, forCellWithReuseIdentifier: "gridLayoutCell")
 
     return collectionView
   }()
@@ -35,7 +36,7 @@ final class FileTreeControllerView: UIView {
 extension FileTreeControllerView {
 
   private func setupSubviews() {
-    backgroundColor = .cyan
+    backgroundColor = .white
     addSubview(collectionView)
 
     NSLayoutConstraint.activate([
