@@ -10,14 +10,13 @@ import UIKit
 final class FileTreeControllerView: UIView {
 
   let collectionView: UICollectionView = {
-    let gridLayout = UICollectionViewFlowLayout()
-    gridLayout.scrollDirection = .vertical
-    gridLayout.itemSize = CGSize(width: 110, height: 150)
+    let layoutContainer = CollectionViewLayoutContainer()
 
-    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: gridLayout)
+    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layoutContainer.tableLayout)
     collectionView.showsVerticalScrollIndicator = false
     collectionView.translatesAutoresizingMaskIntoConstraints = false
     collectionView.register(CollectionViewGridLayoutCell.self, forCellWithReuseIdentifier: "gridLayoutCell")
+    collectionView.register(CollectionViewTableLayoutCell.self, forCellWithReuseIdentifier: "tableLayoutCell")
 
     return collectionView
   }()
@@ -47,5 +46,29 @@ extension FileTreeControllerView {
     ])
 
   }
+
+}
+
+struct CollectionViewLayoutContainer {
+
+  let gridLayout: UICollectionViewFlowLayout = {
+    let gridLayout = UICollectionViewFlowLayout()
+    gridLayout.scrollDirection = .vertical
+    gridLayout.itemSize = CGSize(width: 110, height: 150)
+
+    return gridLayout
+  }()
+
+  let tableLayout: UICollectionViewLayout = {
+    let config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
+    return UICollectionViewCompositionalLayout.list(using: config)
+  }()
+
+}
+
+enum CollectionViewLayoutStyle {
+
+  case grid
+  case table
 
 }

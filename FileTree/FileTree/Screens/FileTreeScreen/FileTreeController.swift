@@ -38,8 +38,9 @@ extension FileTreeController: UICollectionViewDataSource, UICollectionViewDelega
   }
 
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "gridLayoutCell", for: indexPath) as! CollectionViewGridLayoutCell
-    cell.setData(isDirectory: indexPath.row % 2 == 0, title: "test.txt")
+//    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "gridLayoutCell", for: indexPath) as! CollectionViewGridLayoutCell
+//    cell.setData(isDirectory: indexPath.row % 2 == 0, title: "test.txt")
+    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "tableLayoutCell", for: indexPath)
     
     return cell
   }

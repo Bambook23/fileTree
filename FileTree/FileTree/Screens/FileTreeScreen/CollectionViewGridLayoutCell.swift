@@ -52,7 +52,6 @@ extension CollectionViewGridLayoutCell {
       titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
       titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
     ])
-
   }
 
   func setData(isDirectory: Bool, title: String) {
