@@ -9,6 +9,9 @@ import UIKit
 
 final class CollectionViewGridLayoutCell: UICollectionViewCell {
 
+  private let iconImageView = UIImageView()
+  private let titleLabel = UILabel()
+
   override init(frame: CGRect) {
     super.init(frame: frame)
     setupSubviews()
@@ -26,33 +29,22 @@ extension CollectionViewGridLayoutCell {
     contentView.layer.borderWidth = 1
     contentView.layer.cornerRadius = 5
 
-    let iconImageView: UIImageView = {
-      let imageView = UIImageView(image: UIImage(named: "folder"))
-      imageView.contentMode = .scaleToFill
-      imageView.layer.masksToBounds = true
-      imageView.translatesAutoresizingMaskIntoConstraints = false
+    iconImageView.contentMode = .scaleToFill
+    iconImageView.layer.masksToBounds = true
+    iconImageView.translatesAutoresizingMaskIntoConstraints = false
 
-      return imageView
-    }()
-
-    let titleLabel: UILabel = {
-      let label = UILabel()
-      label.textAlignment = .center
-      label.font = .systemFont(ofSize: 15, weight: .regular)
-      label.numberOfLines = 0
-      label.text = "file.txtaSasASasasfdfsdfasdasdfile.txtaSasASasasfdfsdfasdasd"
-      label.translatesAutoresizingMaskIntoConstraints = false
-
-      return label
-    }()
+    titleLabel.textAlignment = .center
+    titleLabel.font = .systemFont(ofSize: 15, weight: .regular)
+    titleLabel.numberOfLines = 0
+    titleLabel.translatesAutoresizingMaskIntoConstraints = false
 
     contentView.addSubview(iconImageView)
     contentView.addSubview(titleLabel)
 
     NSLayoutConstraint.activate([
-      iconImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-      iconImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-      iconImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+      iconImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+      iconImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
+      iconImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
       iconImageView.heightAnchor.constraint(equalToConstant: 70),
 
       titleLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: 10),
@@ -61,6 +53,11 @@ extension CollectionViewGridLayoutCell {
       titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
     ])
 
+  }
+
+  func setData(isDirectory: Bool, title: String) {
+    self.iconImageView.image = UIImage(named: isDirectory ? "folder" : "file")
+    self.titleLabel.text = title
   }
 
 }

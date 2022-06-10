@@ -12,7 +12,7 @@ final class FileTreeControllerView: UIView {
   let collectionView: UICollectionView = {
     let gridLayout = UICollectionViewFlowLayout()
     gridLayout.scrollDirection = .vertical
-    gridLayout.itemSize = CGSize(width: 120, height: 150)
+    gridLayout.itemSize = CGSize(width: 110, height: 150)
 
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: gridLayout)
     collectionView.showsVerticalScrollIndicator = false
