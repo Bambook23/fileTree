@@ -61,7 +61,8 @@ struct CollectionViewLayoutContainer {
   }()
 
   let tableLayout: UICollectionViewLayout = {
-    let config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
+    var config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
+    config.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
     return UICollectionViewCompositionalLayout.list(using: config)
   }()
 

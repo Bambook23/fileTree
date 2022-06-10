@@ -58,6 +58,7 @@ extension FileTreeController: UICollectionViewDataSource, UICollectionViewDelega
 
     case .table:
       let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "tableLayoutCell", for: indexPath) as! CollectionViewTableLayoutCell
+      cell.setData(isDirectory: indexPath.row % 2 == 0, title: "test.txt")
       return cell
     }
   }
