@@ -9,25 +9,21 @@ import UIKit
 
 final class FileTreeControllerView: UIView {
 
-  let collectionView: UICollectionView = {
+  private let collectionViewLayoutStyle: CollectionViewLayoutStyle
+
+  let collectionView: UICollectionView
+
+  init(collectionViewLayoutStyle: CollectionViewLayoutStyle) {
+    self.collectionViewLayoutStyle = collectionViewLayoutStyle
     let layoutContainer = CollectionViewLayoutContainer()
-
-    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layoutContainer.tableLayout)
-    collectionView.showsVerticalScrollIndicator = false
-    collectionView.translatesAutoresizingMaskIntoConstraints = false
-    collectionView.register(CollectionViewGridLayoutCell.self, forCellWithReuseIdentifier: "gridLayoutCell")
-    collectionView.register(CollectionViewTableLayoutCell.self, forCellWithReuseIdentifier: "tableLayoutCell")
-
-    return collectionView
-  }()
-
-  override init(frame: CGRect) {
-    super.init(frame: frame)
+    self.collectionView = UICollectionView(frame: .zero,
+                                           collectionViewLayout: collectionViewLayoutStyle == .grid ? layoutContainer.gridLayout : layoutContainer.tableLayout)
+    super.init(frame: .zero)
     setupSubviews()
   }
 
   required init?(coder: NSCoder) {
-    super.init(coder: coder)
+    fatalError("Should use another initializer")
   }
 
 }
@@ -37,6 +33,11 @@ extension FileTreeControllerView {
   private func setupSubviews() {
     backgroundColor = .white
     addSubview(collectionView)
+
+    collectionView.showsVerticalScrollIndicator = false
+    collectionView.translatesAutoresizingMaskIntoConstraints = false
+    collectionView.register(CollectionViewGridLayoutCell.self, forCellWithReuseIdentifier: "gridLayoutCell")
+    collectionView.register(CollectionViewTableLayoutCell.self, forCellWithReuseIdentifier: "tableLayoutCell")
 
     NSLayoutConstraint.activate([
       collectionView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),

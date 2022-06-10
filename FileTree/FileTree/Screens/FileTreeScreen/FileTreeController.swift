@@ -9,7 +9,19 @@ import UIKit
 
 final class FileTreeController: UIViewController {
 
-  private let fileTreeControllerView = FileTreeControllerView()
+  private let fileTreeControllerView: FileTreeControllerView
+  private let collectionViewLayoutStyle: CollectionViewLayoutStyle
+
+  init(collectionViewLayoutStyle: CollectionViewLayoutStyle) {
+    self.collectionViewLayoutStyle = collectionViewLayoutStyle
+    self.fileTreeControllerView = FileTreeControllerView(collectionViewLayoutStyle:
+                                                          collectionViewLayoutStyle)
+    super.init(nibName: nil, bundle: nil)
+  }
+
+  required init?(coder: NSCoder) {
+    fatalError("Shoud use another init")
+  }
 
   override func loadView() {
     view = fileTreeControllerView
@@ -38,11 +50,16 @@ extension FileTreeController: UICollectionViewDataSource, UICollectionViewDelega
   }
 
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "gridLayoutCell", for: indexPath) as! CollectionViewGridLayoutCell
-//    cell.setData(isDirectory: indexPath.row % 2 == 0, title: "test.txt")
-    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "tableLayoutCell", for: indexPath)
-    
-    return cell
+    switch collectionViewLayoutStyle {
+    case .grid:
+      let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "gridLayoutCell", for: indexPath) as! CollectionViewGridLayoutCell
+      cell.setData(isDirectory: indexPath.row % 2 == 0, title: "test.txt")
+      return cell
+
+    case .table:
+      let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "tableLayoutCell", for: indexPath) as! CollectionViewTableLayoutCell
+      return cell
+    }
   }
 
 }
