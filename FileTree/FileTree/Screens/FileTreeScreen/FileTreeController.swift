@@ -9,9 +9,22 @@ import UIKit
 
 final class FileTreeController: UIViewController {
 
+  private let fileTreeControllerView = FileTreeControllerView()
+
+  override func loadView() {
+    view = fileTreeControllerView
+  }
+
   override func viewDidLoad() {
     super.viewDidLoad()
-    view.backgroundColor = .cyan
+  }
+
+}
+
+extension FileTreeController {
+
+  private func view() -> FileTreeControllerView {
+    view as! FileTreeControllerView
   }
 
 }
