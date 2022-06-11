@@ -15,7 +15,6 @@ final class CollectionViewTableLayoutCell: UICollectionViewListCell {
     super.init(frame: frame)
     configuration = defaultContentConfiguration()
     setupSubviews()
-
   }
 
   required init?(coder: NSCoder) {
