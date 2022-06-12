@@ -60,10 +60,12 @@ struct CollectionViewLayoutContainer {
     return gridLayout
   }()
 
-  let tableLayout: UICollectionViewLayout = {
-    var config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
-    config.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-    return UICollectionViewCompositionalLayout.list(using: config)
+  let tableLayout: UICollectionViewFlowLayout = {
+    let tableLayout = UICollectionViewFlowLayout()
+    tableLayout.scrollDirection = .vertical
+    tableLayout.itemSize = CGSize(width: UIScreen.main.bounds.width - 20, height: 50)
+
+    return tableLayout
   }()
 
 }

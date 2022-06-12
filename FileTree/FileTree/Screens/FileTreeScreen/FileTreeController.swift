@@ -50,7 +50,7 @@ extension FileTreeController {
   private func setLayoutButton() {
     let layoutButton: UIButton = {
       let button = UIButton()
-      button.setImage(UIImage(named: collectionViewLayoutStyle == .grid ? "grid" : "list"),
+      button.setImage(UIImage(named: collectionViewLayoutStyle == .grid ? "list" : "grid"),
                       for: .normal)
       button.addTarget(self, action: #selector(changeLayout), for: .touchDown)
 
@@ -61,32 +61,38 @@ extension FileTreeController {
   }
 
   @objc private func changeLayout() {
-    view().collectionView.collectionViewLayout.invalidateLayout()
     let layoutContainer = CollectionViewLayoutContainer()
+    let indexPaths = view().collectionView.indexPathsForVisibleItems
+
     if collectionViewLayoutStyle == .grid {
-      view().collectionView.collectionViewLayout.invalidateLayout()
-      collectionViewLayoutStyle = .table
+      for path in indexPaths {
+        if let cell = view().collectionView.cellForItem(at: path) as? CollectionViewTableLayoutCell {
+          cell.deactivateConstraints()
+          cell.removeFromSuperview()
+        }
+      }
       view().collectionView.setCollectionViewLayout(layoutContainer.tableLayout, animated: true)
+      collectionViewLayoutStyle = .table
     } else {
-      view().collectionView.collectionViewLayout.invalidateLayout()
+      for path in indexPaths {
+        if let cell = view().collectionView.cellForItem(at: path) as? CollectionViewGridLayoutCell {
+          cell.deactivateConstraints()
+          cell.removeFromSuperview()
+        }
+      }
       view().collectionView.setCollectionViewLayout(layoutContainer.gridLayout, animated: true)
       collectionViewLayoutStyle = .grid
     }
-    let indexPath = view().collectionView.indexPathsForVisibleItems
-    for path in indexPath {
-      let cell = view().collectionView.cellForItem(at: path)
-      cell?.removeFromSuperview()
-    }
-    view().collectionView.reloadItems(at: indexPath)
+    view().collectionView.reloadItems(at: indexPaths)
     setLayoutButton()
   }
-  
+
 }
 
 extension FileTreeController: UICollectionViewDataSource, UICollectionViewDelegate {
 
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    3
+  10
   }
 
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
