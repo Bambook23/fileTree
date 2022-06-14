@@ -66,8 +66,4 @@ extension CollectionViewGridLayoutCell {
     self.titleLabel.text = title
   }
 
-  func deactivateConstraints() {
-    NSLayoutConstraint.deactivate(cellConstraints)
-  }
-
 }

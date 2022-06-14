@@ -103,11 +103,19 @@
 			isa = PBXGroup;
 			children = (
 				B59492C628533B2000ACACBD /* FileTreeController.swift */,
+				B5A1D5282858653E00C1BF6C /* View */,
+			);
+			path = FileTreeScreen;
+			sourceTree = "<group>";
+		};
+		B5A1D5282858653E00C1BF6C /* View */ = {
+			isa = PBXGroup;
+			children = (
 				B59492C82853460B00ACACBD /* FileTreeControllerView.swift */,
 				B59492CA28535DF500ACACBD /* CollectionViewGridLayoutCell.swift */,
 				B59492CC2853BFE600ACACBD /* CollectionViewTableLayoutCell.swift */,
 			);
-			path = FileTreeScreen;
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

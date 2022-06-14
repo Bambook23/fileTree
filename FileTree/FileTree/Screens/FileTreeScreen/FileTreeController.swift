@@ -62,28 +62,27 @@ extension FileTreeController {
 
   @objc private func changeLayout() {
     let layoutContainer = CollectionViewLayoutContainer()
-    let indexPaths = view().collectionView.indexPathsForVisibleItems
 
     if collectionViewLayoutStyle == .grid {
-      for path in indexPaths {
-        if let cell = view().collectionView.cellForItem(at: path) as? CollectionViewTableLayoutCell {
-          cell.deactivateConstraints()
-          cell.removeFromSuperview()
-        }
-      }
       view().collectionView.setCollectionViewLayout(layoutContainer.tableLayout, animated: true)
       collectionViewLayoutStyle = .table
     } else {
-      for path in indexPaths {
-        if let cell = view().collectionView.cellForItem(at: path) as? CollectionViewGridLayoutCell {
-          cell.deactivateConstraints()
-          cell.removeFromSuperview()
-        }
-      }
       view().collectionView.setCollectionViewLayout(layoutContainer.gridLayout, animated: true)
       collectionViewLayoutStyle = .grid
     }
-    view().collectionView.reloadItems(at: indexPaths)
+
+    func reloadVisibleCells() {
+      let indexPaths = view().collectionView.indexPathsForVisibleItems
+      for path in indexPaths {
+        if let cell = view().collectionView.cellForItem(at: path) {
+          cell.removeFromSuperview()
+        }
+      }
+      view().collectionView.reloadItems(at: indexPaths)
+    }
+    
+    reloadVisibleCells()
+
     setLayoutButton()
   }
 
@@ -92,7 +91,7 @@ extension FileTreeController {
 extension FileTreeController: UICollectionViewDataSource, UICollectionViewDelegate {
 
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-  10
+    100
   }
 
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

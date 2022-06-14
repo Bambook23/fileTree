@@ -73,8 +73,4 @@ extension CollectionViewTableLayoutCell {
     titleLabel.text = title
   }
 
-  func deactivateConstraints() {
-    NSLayoutConstraint.deactivate(cellConstraints)
-  }
-
 }
