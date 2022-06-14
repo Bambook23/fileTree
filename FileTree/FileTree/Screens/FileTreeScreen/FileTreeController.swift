@@ -10,12 +10,14 @@ import UIKit
 final class FileTreeController: UIViewController {
 
   private let fileTreeControllerView: FileTreeControllerView
+  private let requestsManager: NetworkManager
   private var collectionViewLayoutStyle: CollectionViewLayoutStyle
 
-  init(collectionViewLayoutStyle: CollectionViewLayoutStyle) {
+  init(collectionViewLayoutStyle: CollectionViewLayoutStyle, requestsManager: NetworkManager) {
     self.collectionViewLayoutStyle = collectionViewLayoutStyle
     self.fileTreeControllerView = FileTreeControllerView(collectionViewLayoutStyle:
                                                           collectionViewLayoutStyle)
+    self.requestsManager = requestsManager
     super.init(nibName: nil, bundle: nil)
   }
 
@@ -32,6 +34,7 @@ final class FileTreeController: UIViewController {
     setupNavbar()
     view().collectionView.delegate = self
     view().collectionView.dataSource = self
+    requestsManager.getItems()
   }
 
 }
