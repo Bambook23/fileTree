@@ -9,18 +9,19 @@ import UIKit
 
 final class FileTreeController: UIViewController {
 
-  private var collectionData: [DirectoryObject] = []
+  private var collectionData: [DirectoryObject]
   private var itemsToShow: [DirectoryObject] = []
   private let fileTreeControllerView: FileTreeControllerView
   private let directoryObjectUUID: UUID?
   private var requestsManager: NetworkManager
   private var collectionViewLayoutStyle: CollectionViewLayoutStyle
 
-  init(collectionViewLayoutStyle: CollectionViewLayoutStyle, requestsManager: NetworkManager, directoryObjectUUID: UUID?) {
+  init(collectionViewLayoutStyle: CollectionViewLayoutStyle, requestsManager: NetworkManager, collectionData: [DirectoryObject], directoryObjectUUID: UUID?) {
     self.collectionViewLayoutStyle = collectionViewLayoutStyle
     self.fileTreeControllerView = FileTreeControllerView(collectionViewLayoutStyle:
                                                           collectionViewLayoutStyle)
     self.requestsManager = requestsManager
+    self.collectionData = collectionData
     self.directoryObjectUUID = directoryObjectUUID
     super.init(nibName: nil, bundle: nil)
   }
@@ -39,7 +40,11 @@ final class FileTreeController: UIViewController {
     requestsManager.delegate = self
     view().collectionView.delegate = self
     view().collectionView.dataSource = self
-    requestsManager.getItems()
+    if navigationController?.viewControllers.first == self {
+      requestsManager.getItems()
+    } else {
+      itemsToShow = getItemsToShow()
+    }
   }
 
 }
@@ -52,6 +57,7 @@ extension FileTreeController {
 
   private func setupNavbar() {
     title = "Title"
+    navigationItem.backButtonTitle = ""
     setLayoutButton()
   }
 
@@ -116,6 +122,18 @@ extension FileTreeController: UICollectionViewDataSource, UICollectionViewDelega
       cell.setData(isDirectory: directoryItem.itemType == .directory ? true : false,
                    title: directoryItem.itemName)
       return cell
+    }
+  }
+
+  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    let selectedItem = itemsToShow[indexPath.row]
+    if selectedItem.itemType == .directory {
+      let controller = FileTreeController(collectionViewLayoutStyle: collectionViewLayoutStyle,
+                                          requestsManager: requestsManager,
+                                          collectionData: collectionData,
+                                          directoryObjectUUID: UUID(uuidString: selectedItem.uuid))
+
+      navigationController?.pushViewController(controller, animated: true)
     }
   }
 
