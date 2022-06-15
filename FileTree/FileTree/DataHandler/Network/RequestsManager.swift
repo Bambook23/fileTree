@@ -7,13 +7,22 @@
 
 import Foundation
 
+protocol NetworkManagerDelegate: AnyObject {
+
+  func didGetItems(items: [DirectoryObject])
+
+}
+
 protocol NetworkManager {
 
+  var delegate: NetworkManagerDelegate? {get set}
   func getItems()
 
 }
 
 final class RequestsManager: NetworkManager {
+
+  weak var delegate: NetworkManagerDelegate?
 
   let networkService = APINetworkService()
 
@@ -23,7 +32,9 @@ final class RequestsManager: NetworkManager {
 
       switch result {
       case .success(let items):
-        print(items)
+        DispatchQueue.main.async {
+          self.delegate?.didGetItems(items: items)
+        }
       case .failure(let error):
         print(error)
       }

@@ -9,15 +9,19 @@ import UIKit
 
 final class FileTreeController: UIViewController {
 
+  private var collectionData: [DirectoryObject] = []
+  private var itemsToShow: [DirectoryObject] = []
   private let fileTreeControllerView: FileTreeControllerView
-  private let requestsManager: NetworkManager
+  private let directoryObjectUUID: UUID?
+  private var requestsManager: NetworkManager
   private var collectionViewLayoutStyle: CollectionViewLayoutStyle
 
-  init(collectionViewLayoutStyle: CollectionViewLayoutStyle, requestsManager: NetworkManager) {
+  init(collectionViewLayoutStyle: CollectionViewLayoutStyle, requestsManager: NetworkManager, directoryObjectUUID: UUID?) {
     self.collectionViewLayoutStyle = collectionViewLayoutStyle
     self.fileTreeControllerView = FileTreeControllerView(collectionViewLayoutStyle:
                                                           collectionViewLayoutStyle)
     self.requestsManager = requestsManager
+    self.directoryObjectUUID = directoryObjectUUID
     super.init(nibName: nil, bundle: nil)
   }
 
@@ -32,6 +36,7 @@ final class FileTreeController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     setupNavbar()
+    requestsManager.delegate = self
     view().collectionView.delegate = self
     view().collectionView.dataSource = self
     requestsManager.getItems()
@@ -94,21 +99,44 @@ extension FileTreeController {
 extension FileTreeController: UICollectionViewDataSource, UICollectionViewDelegate {
 
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    100
+    itemsToShow.count
   }
 
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    let directoryItem = itemsToShow[indexPath.row]
     switch collectionViewLayoutStyle {
     case .grid:
       let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "gridLayoutCell", for: indexPath) as! CollectionViewGridLayoutCell
-      cell.setData(isDirectory: indexPath.row % 2 == 0, title: "test.txt")
+      cell.setData(isDirectory: directoryItem.itemType == .directory ? true : false,
+                   title: directoryItem.itemName)
       return cell
 
     case .table:
       let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "tableLayoutCell", for: indexPath) as! CollectionViewTableLayoutCell
-      cell.setData(isDirectory: indexPath.row % 2 == 0, title: "test.txt")
+      cell.setData(isDirectory: directoryItem.itemType == .directory ? true : false,
+                   title: directoryItem.itemName)
       return cell
     }
+  }
+
+}
+
+extension FileTreeController: NetworkManagerDelegate {
+
+  func didGetItems(items: [DirectoryObject]) {
+    collectionData = items
+    itemsToShow = getItemsToShow()
+    self.view().collectionView.reloadData()
+  }
+
+}
+
+extension FileTreeController {
+
+  private func getItemsToShow() -> [DirectoryObject] {
+    return collectionData.filter { directoryObject in
+      return UUID(uuidString: directoryObject.parentUUID) == directoryObjectUUID
+    }.sorted { $0.itemType < $1.itemType }
   }
 
 }

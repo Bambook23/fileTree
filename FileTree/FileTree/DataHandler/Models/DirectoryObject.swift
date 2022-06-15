@@ -21,9 +21,22 @@ struct DirectoryObject: Codable {
 
 }
 
-enum ItemType: String, Codable {
+enum ItemType: String, Codable, Comparable {
 
-    case directory = "d"
-    case file = "f"
+  case directory = "d"
+  case file = "f"
+
+  private var comparisonValue: String {
+    switch self {
+    case .directory:
+      return "directory"
+    case .file:
+      return "file"
+    }
+  }
+
+  static func < (lhs: ItemType, rhs: ItemType) -> Bool {
+    lhs.comparisonValue < rhs.comparisonValue
+  }
   
 }
