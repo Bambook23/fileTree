@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B58FAD4C285A09F40035ABAF /* DirectoryDataContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58FAD4B285A09F40035ABAF /* DirectoryDataContainer.swift */; };
 		B59354BA2858A13A0088656D /* DirectoryObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59354B92858A13A0088656D /* DirectoryObject.swift */; };
 		B59354BD2858A3870088656D /* RequestsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59354BC2858A3870088656D /* RequestsManager.swift */; };
 		B59354BF2858BE810088656D /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59354BE2858BE810088656D /* Request.swift */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B58FAD4B285A09F40035ABAF /* DirectoryDataContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectoryDataContainer.swift; sourceTree = "<group>"; };
 		B59354B92858A13A0088656D /* DirectoryObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectoryObject.swift; sourceTree = "<group>"; };
 		B59354BC2858A3870088656D /* RequestsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestsManager.swift; sourceTree = "<group>"; };
 		B59354BE2858BE810088656D /* Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
@@ -49,9 +51,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B58FAD4A285A09C80035ABAF /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				B58FAD4B285A09F40035ABAF /* DirectoryDataContainer.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
 		B59354B728589EF60088656D /* DataHandler */ = {
 			isa = PBXGroup;
 			children = (
+				B58FAD4A285A09C80035ABAF /* Data */,
 				B59354B82858A10A0088656D /* Models */,
 				B59354BB2858A34D0088656D /* Network */,
 			);
@@ -227,6 +238,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B58FAD4C285A09F40035ABAF /* DirectoryDataContainer.swift in Sources */,
 				B59354BA2858A13A0088656D /* DirectoryObject.swift in Sources */,
 				B59354BF2858BE810088656D /* Request.swift in Sources */,
 				B59492CD2853BFE600ACACBD /* CollectionViewTableLayoutCell.swift in Sources */,

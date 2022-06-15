@@ -9,20 +9,20 @@ import UIKit
 
 final class FileTreeController: UIViewController {
 
-  private var collectionData: [DirectoryObject]
+  private let dataContainer: DirectoryDataContainer
   private var itemsToShow: [DirectoryObject] = []
   private let fileTreeControllerView: FileTreeControllerView
   private let directoryObjectUUID: UUID?
   private var requestsManager: NetworkManager
   private var collectionViewLayoutStyle: CollectionViewLayoutStyle
 
-  init(collectionViewLayoutStyle: CollectionViewLayoutStyle, requestsManager: NetworkManager, collectionData: [DirectoryObject], directoryObjectUUID: UUID?) {
+  init(collectionViewLayoutStyle: CollectionViewLayoutStyle, requestsManager: NetworkManager, directoryObjectUUID: UUID?, dataContainer: DirectoryDataContainer) {
     self.collectionViewLayoutStyle = collectionViewLayoutStyle
     self.fileTreeControllerView = FileTreeControllerView(collectionViewLayoutStyle:
                                                           collectionViewLayoutStyle)
     self.requestsManager = requestsManager
-    self.collectionData = collectionData
     self.directoryObjectUUID = directoryObjectUUID
+    self.dataContainer = dataContainer
     super.init(nibName: nil, bundle: nil)
   }
 
@@ -37,13 +37,15 @@ final class FileTreeController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     setupNavbar()
-    requestsManager.delegate = self
+    dataContainer.delegate = self
+    requestsManager.delegate = dataContainer
     view().collectionView.delegate = self
     view().collectionView.dataSource = self
+    addGestureToCollection()
     if navigationController?.viewControllers.first == self {
       requestsManager.getItems()
     } else {
-      itemsToShow = getItemsToShow()
+      itemsToShow = getItemsToShow(from: dataContainer.collectionData)
     }
   }
 
@@ -130,8 +132,8 @@ extension FileTreeController: UICollectionViewDataSource, UICollectionViewDelega
     if selectedItem.itemType == .directory {
       let controller = FileTreeController(collectionViewLayoutStyle: collectionViewLayoutStyle,
                                           requestsManager: requestsManager,
-                                          collectionData: collectionData,
-                                          directoryObjectUUID: UUID(uuidString: selectedItem.uuid))
+                                          directoryObjectUUID: UUID(uuidString: selectedItem.uuid),
+                                          dataContainer: dataContainer)
 
       navigationController?.pushViewController(controller, animated: true)
     }
@@ -139,11 +141,10 @@ extension FileTreeController: UICollectionViewDataSource, UICollectionViewDelega
 
 }
 
-extension FileTreeController: NetworkManagerDelegate {
+extension FileTreeController: DirectoryDataContainerDelegate {
 
-  func didGetItems(items: [DirectoryObject]) {
-    collectionData = items
-    itemsToShow = getItemsToShow()
+  func didUpdataData(items: [DirectoryObject]) {
+    itemsToShow = getItemsToShow(from: items)
     self.view().collectionView.reloadData()
   }
 
@@ -151,10 +152,47 @@ extension FileTreeController: NetworkManagerDelegate {
 
 extension FileTreeController {
 
-  private func getItemsToShow() -> [DirectoryObject] {
-    return collectionData.filter { directoryObject in
+  private func getItemsToShow(from items: [DirectoryObject]) -> [DirectoryObject] {
+    return items.filter { directoryObject in
       return UUID(uuidString: directoryObject.parentUUID) == directoryObjectUUID
     }.sorted { $0.itemType < $1.itemType }
+  }
+
+  private func addGestureToCollection() {
+    let longPressedGesture = UILongPressGestureRecognizer(target: self,
+                                                        action: #selector(self.onLongPress))
+
+    longPressedGesture.minimumPressDuration = 1
+    longPressedGesture.delaysTouchesBegan = true
+    view().collectionView.addGestureRecognizer(longPressedGesture)
+  }
+
+  private func deleteItem(at path: IndexPath) {
+    print("Delete \(path.row)")
+  }
+
+  @objc private func onLongPress(gestureRecognizer: UILongPressGestureRecognizer) {
+    if gestureRecognizer.state != .began { return }
+    let point = gestureRecognizer.location(in: view().collectionView)
+    if let indexPath = view().collectionView.indexPathForItem(at: point) {
+      let alertController = UIAlertController(title: "Delete",
+                                              message: "Do you want to delete an item?",
+                                              preferredStyle: .actionSheet)
+
+      let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+        self?.deleteItem(at: indexPath)
+      }
+
+      let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+          print("Deletion canceled")
+      }
+
+      alertController.addAction(deleteAction)
+      alertController.addAction(cancelAction)
+      DispatchQueue.main.async { [weak self] in
+        self?.navigationController?.present(alertController, animated: true)
+      }
+    }
   }
 
 }
