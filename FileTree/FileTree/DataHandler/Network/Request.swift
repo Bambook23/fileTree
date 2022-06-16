@@ -21,7 +21,7 @@ protocol DataRequest {
   var url: String { get }
   var headers: [String: String]? { get }
   var queryItems: [String: String]? { get }
-  var body: String? { get }
+  var body: [String: Any]? { get }
 
 }
 
@@ -29,8 +29,8 @@ struct Request: DataRequest {
 
   var method: HTTPMethod
   var url: String
-  var headers: [String : String]?
-  var queryItems: [String : String]?
-  var body: String?
+  var headers: [String: String]?
+  var queryItems: [String: String]?
+  var body: [String: Any]?
 
 }
