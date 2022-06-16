@@ -20,6 +20,8 @@
 		B59492C92853460B00ACACBD /* FileTreeControllerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59492C82853460B00ACACBD /* FileTreeControllerView.swift */; };
 		B59492CB28535DF500ACACBD /* CollectionViewGridLayoutCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59492CA28535DF500ACACBD /* CollectionViewGridLayoutCell.swift */; };
 		B59492CD2853BFE600ACACBD /* CollectionViewTableLayoutCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59492CC2853BFE600ACACBD /* CollectionViewTableLayoutCell.swift */; };
+		B597337B285B48020046A16D /* ItemAddingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B597337A285B48020046A16D /* ItemAddingController.swift */; };
+		B597337F285B48890046A16D /* ItemAddingControllerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B597337E285B48890046A16D /* ItemAddingControllerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +40,8 @@
 		B59492C82853460B00ACACBD /* FileTreeControllerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTreeControllerView.swift; sourceTree = "<group>"; };
 		B59492CA28535DF500ACACBD /* CollectionViewGridLayoutCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewGridLayoutCell.swift; sourceTree = "<group>"; };
 		B59492CC2853BFE600ACACBD /* CollectionViewTableLayoutCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewTableLayoutCell.swift; sourceTree = "<group>"; };
+		B597337A285B48020046A16D /* ItemAddingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemAddingController.swift; sourceTree = "<group>"; };
+		B597337E285B48890046A16D /* ItemAddingControllerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemAddingControllerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +131,7 @@
 		B59492C2285337DE00ACACBD /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				B5973379285B47DD0046A16D /* ItemAddingScreen */,
 				B59492C528533B0500ACACBD /* FileTreeScreen */,
 			);
 			path = Screens;
@@ -156,6 +161,23 @@
 				B5A1D5282858653E00C1BF6C /* View */,
 			);
 			path = FileTreeScreen;
+			sourceTree = "<group>";
+		};
+		B5973379285B47DD0046A16D /* ItemAddingScreen */ = {
+			isa = PBXGroup;
+			children = (
+				B597337A285B48020046A16D /* ItemAddingController.swift */,
+				B597337D285B484B0046A16D /* View */,
+			);
+			path = ItemAddingScreen;
+			sourceTree = "<group>";
+		};
+		B597337D285B484B0046A16D /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B597337E285B48890046A16D /* ItemAddingControllerView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		B5A1D5282858653E00C1BF6C /* View */ = {
@@ -241,8 +263,10 @@
 				B58FAD4C285A09F40035ABAF /* DirectoryDataContainer.swift in Sources */,
 				B59354BA2858A13A0088656D /* DirectoryObject.swift in Sources */,
 				B59354BF2858BE810088656D /* Request.swift in Sources */,
+				B597337B285B48020046A16D /* ItemAddingController.swift in Sources */,
 				B59492CD2853BFE600ACACBD /* CollectionViewTableLayoutCell.swift in Sources */,
 				B59354C12858C5640088656D /* APINetworkService.swift in Sources */,
+				B597337F285B48890046A16D /* ItemAddingControllerView.swift in Sources */,
 				B59492CB28535DF500ACACBD /* CollectionViewGridLayoutCell.swift in Sources */,
 				B59354BD2858A3870088656D /* RequestsManager.swift in Sources */,
 				B59354C32858CA3E0088656D /* RequestError.swift in Sources */,
