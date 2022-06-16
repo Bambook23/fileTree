@@ -17,6 +17,7 @@ protocol NetworkManager {
 
   var delegate: NetworkManagerDelegate? {get set}
   func getItems()
+  func deleteItems(uuid: String, itemType: ItemType)
 
 }
 
@@ -28,13 +29,39 @@ final class RequestsManager: NetworkManager {
 
   func getItems() {
     let request = Request(method: .get, url: "https://sheetdb.io/api/v1/ijtc8qex0zds3")
-    networkService.sendRequest(request: request, dataType: DirectoryObject.self) { result in
-
+    networkService.sendRequest(request: request, dataType: [DirectoryObject].self) { result in
       switch result {
       case .success(let items):
         DispatchQueue.main.async {
           self.delegate?.didGetItems(items: items)
         }
+      case .failure(let error):
+        print(error)
+      }
+    }
+  }
+
+  func deleteItems(uuid: String, itemType: ItemType) {
+    if itemType == .directory {
+      let childrenDeleteRequest = Request(method: .delete,
+                                          url: "https://sheetdb.io/api/v1/ijtc8qex0zds3/parentUUID/\(uuid)")
+      networkService.sendRequest(request: childrenDeleteRequest, dataType: [String : Int].self) { result in
+        switch result {
+        case .success(let result):
+          print(result)
+        case .failure(let error):
+          print(error)
+        }
+      }
+    }
+
+    let itemDeleteRequest = Request(method: .delete,
+                          url: "https://sheetdb.io/api/v1/ijtc8qex0zds3/UUID/\(uuid)")
+    networkService.sendRequest(request: itemDeleteRequest, dataType: [String : Int].self) { result in
+      switch result {
+      case .success(let result):
+        print(result)
+        self.getItems()
       case .failure(let error):
         print(error)
       }

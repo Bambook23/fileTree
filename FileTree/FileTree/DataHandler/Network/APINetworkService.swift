@@ -9,12 +9,12 @@ import Foundation
 
 protocol NetworkService {
 
-  func sendRequest<T: Decodable>(request: DataRequest, dataType: T.Type, completion: @escaping (Result<[T], RequestError>) -> Void)
+  func sendRequest<T: Decodable>(request: DataRequest, dataType: T.Type, completion: @escaping (Result<T, RequestError>) -> Void)
 
 }
 
 struct APINetworkService: NetworkService {
-  func sendRequest<T>(request: DataRequest, dataType: T.Type, completion: @escaping (Result<[T], RequestError>) -> Void) where T : Decodable {
+  func sendRequest<T>(request: DataRequest, dataType: T.Type, completion: @escaping (Result<T, RequestError>) -> Void) where T : Decodable {
     guard var urlComponent = URLComponents(string: request.url)
     else { return completion(.failure(.invalidURL)) }
 
@@ -43,10 +43,18 @@ struct APINetworkService: NetworkService {
     DispatchQueue.main.async {
       URLSession.shared.dataTask(with: urlRequest) { data, response, error in
         if let data = data {
-          if let decodedData = try? JSONDecoder().decode([T].self, from: data) {
-          completion(.success(decodedData))
-          } else { completion(.failure(.decodingError)) }
-        } else { completion(.failure(.unknown)) }
+          do {
+            let decodedData = try JSONDecoder().decode(T.self, from: data)
+            completion(.success(decodedData))
+          } catch {
+            print(error)
+            completion(.failure(.decodingError))
+          }
+        } else {
+          completion(.failure(.unknown))
+          print(error ?? "")
+          print(response ?? "")
+        }
       }.resume()
     }
   }

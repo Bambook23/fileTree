@@ -34,10 +34,14 @@ final class FileTreeController: UIViewController {
     view = fileTreeControllerView
   }
 
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    dataContainer.delegate = self
+  }
+
   override func viewDidLoad() {
     super.viewDidLoad()
     setupNavbar()
-    dataContainer.delegate = self
     requestsManager.delegate = dataContainer
     view().collectionView.delegate = self
     view().collectionView.dataSource = self
@@ -168,7 +172,8 @@ extension FileTreeController {
   }
 
   private func deleteItem(at path: IndexPath) {
-    print("Delete \(path.row)")
+    let item = itemsToShow[path.row]
+    requestsManager.deleteItems(uuid: item.uuid, itemType: item.itemType)
   }
 
   @objc private func onLongPress(gestureRecognizer: UILongPressGestureRecognizer) {
