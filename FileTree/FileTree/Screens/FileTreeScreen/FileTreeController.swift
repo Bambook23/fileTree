@@ -64,20 +64,28 @@ extension FileTreeController {
   private func setupNavbar() {
     title = "Title"
     navigationItem.backButtonTitle = ""
-    setLayoutButton()
+    setBarButtonItems()
   }
 
-  private func setLayoutButton() {
-    let layoutButton: UIButton = {
-      let button = UIButton()
-      button.setImage(UIImage(named: collectionViewLayoutStyle == .grid ? "list" : "grid"),
-                      for: .normal)
-      button.addTarget(self, action: #selector(changeLayout), for: .touchDown)
+  private func setBarButtonItems() {
+    let createFolderButton = UIBarButtonItem(image: UIImage(systemName: "folder.badge.plus"),
+                                      style: .plain,
+                                      target: self,
+                                      action: #selector(createFolder))
 
-      return button
-    }()
+    let createFileButton = UIBarButtonItem(image: UIImage(systemName: "doc.badge.plus"),
+                                           style: .plain,
+                                           target: self,
+                                           action: #selector(createFile))
 
-    navigationItem.rightBarButtonItem = UIBarButtonItem(customView: layoutButton)
+    let layoutButton = UIBarButtonItem(image: UIImage(systemName:
+                                                        collectionViewLayoutStyle == .grid ? "list.dash" :
+                                                        "square.grid.2x2"),
+                                       style: .plain,
+                                       target: self,
+                                       action: #selector(changeLayout))
+
+    navigationItem.rightBarButtonItems = [createFolderButton, createFileButton, layoutButton]
   }
 
   @objc private func changeLayout() {
@@ -102,8 +110,27 @@ extension FileTreeController {
     }
     
     reloadVisibleCells()
+    setBarButtonItems()
+  }
 
-    setLayoutButton()
+  @objc private func createFolder() {
+    let controller = ItemAddingController(itemType: .directory,
+                                          parentUUID: directoryObjectUUID?.uuidString ?? "",
+                                          networkManager: requestsManager)
+
+    controller.modalPresentationStyle = .overFullScreen
+    controller.modalTransitionStyle = .crossDissolve
+    navigationController?.present(controller, animated: true)
+  }
+
+  @objc private func createFile() {
+    let controller = ItemAddingController(itemType: .file,
+                                          parentUUID: directoryObjectUUID?.uuidString ?? "",
+                                          networkManager: requestsManager)
+
+    controller.modalPresentationStyle = .overFullScreen
+    controller.modalTransitionStyle = .crossDissolve
+    navigationController?.present(controller, animated: true)
   }
 
 }

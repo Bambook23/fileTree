@@ -11,10 +11,14 @@ final class ItemAddingController: UIViewController {
 
   private let itemAddingControllerView: ItemAddingControllerView
   private let networkManager: NetworkManager
+  private let parentUUID: String
+  private let itemType: ItemType
 
   init(itemType: ItemType, parentUUID: String, networkManager: NetworkManager) {
     self.itemAddingControllerView = ItemAddingControllerView()
     self.networkManager = networkManager
+    self.parentUUID = parentUUID
+    self.itemType = itemType
     super.init(nibName: nil, bundle: nil)
   }
 
@@ -40,6 +44,7 @@ extension ItemAddingController {
   }
 
   private func setupSubviews() {
+    view().setLabelText(itemType: itemType)
     view().setCancelButtonAction(target: self, action: #selector(onCancelButtonTap), for: .touchUpInside)
     view().setCreateButtonAction(target: self, action: #selector(onCreateButtonTap), for: .touchUpInside)
   }
@@ -50,16 +55,27 @@ extension ItemAddingController {
 
   @objc private func onCancelButtonTap() {
     print("Adding canceled")
+    dismiss(animated: true)
   }
 
   @objc private func onCreateButtonTap() {
-    createItem()
+    if let itemName = view().getTextFieldText() {
+      if itemName.isEmpty {
+        dismiss(animated: true)
+      } else {
+        createItem()
+      }
+    }
   }
 
   private func createItem() {
-    networkManager.createItem(parentUUID: "DB5CBFD0-8A96-4D1E-B2A7-09419BDC2198",
-                              itemType: .file,
-                              itemName: view().getTextFieldText() ?? "No name")
+    let dismissView = { [weak self] in
+      self?.dismiss(animated: true)
+    }
+    networkManager.createItem(parentUUID: parentUUID,
+                              itemType: itemType,
+                              itemName: view().getTextFieldText() ?? "No name",
+                              completion: dismissView)
   }
 
 }

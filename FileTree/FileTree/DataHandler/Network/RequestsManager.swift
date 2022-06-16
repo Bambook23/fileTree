@@ -18,7 +18,7 @@ protocol NetworkManager {
   var delegate: NetworkManagerDelegate? {get set}
   func getItems()
   func deleteItems(uuid: String, itemType: ItemType)
-  func createItem(parentUUID: String, itemType: ItemType, itemName: String)
+  func createItem(parentUUID: String, itemType: ItemType, itemName: String, completion: @escaping (() -> Void?))
 
 }
 
@@ -69,9 +69,9 @@ final class RequestsManager: NetworkManager {
     }
   }
 
-  func createItem(parentUUID: String, itemType: ItemType, itemName: String) {
+  func createItem(parentUUID: String, itemType: ItemType, itemName: String, completion: @escaping (() -> Void?)) {
     let param: [String: Any] = ["data": [["UUID": "\(UUID().uuidString)",
-                                          "parentUUID": "DB5CBFD0-8A96-4D1E-B2A7-09419BDC2198",
+                                          "parentUUID": parentUUID,
                                           "itemType": itemType.rawValue,
                                           "itemName": itemName]]]
     
@@ -85,6 +85,10 @@ final class RequestsManager: NetworkManager {
       switch result {
       case .success(let result):
         print(result)
+        self.getItems()
+        DispatchQueue.main.async {
+          completion()
+        }
       case .failure(let error):
         print(error)
       }

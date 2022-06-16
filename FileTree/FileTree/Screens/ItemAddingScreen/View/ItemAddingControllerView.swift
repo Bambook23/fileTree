@@ -34,13 +34,12 @@ final class ItemAddingControllerView: UIView {
 extension ItemAddingControllerView {
 
   private func setupSubviews() {
-    self.alpha = 70
+    self.backgroundColor = .gray.withAlphaComponent(0.5)
 
     itemAddingView.backgroundColor = .white
     itemAddingView.layer.cornerRadius = 5
 
     label.font = .systemFont(ofSize: 20)
-    label.text = "Create item"
 
     textField.placeholder = "Name"
     textField.layer.borderWidth = 0.25
@@ -102,6 +101,11 @@ extension ItemAddingControllerView {
 
   func setCreateButtonAction(target: Any, action: Selector, for event: UIControl.Event) {
     createButton.addTarget(target, action: action, for: event)
+  }
+
+  func setLabelText(itemType: ItemType) {
+    let element = itemType == .file ? "file" : "directory"
+    label.text = "Create \(element)"
   }
 
   func getTextFieldText() -> String? {
