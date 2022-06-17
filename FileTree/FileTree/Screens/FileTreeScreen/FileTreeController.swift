@@ -9,20 +9,22 @@ import UIKit
 
 final class FileTreeController: UIViewController {
 
-  private let dataContainer: DirectoryDataContainer
   private var itemsToShow: [DirectoryObject] = []
+  private let dataContainer: DirectoryDataContainer
   private let fileTreeControllerView: FileTreeControllerView
   private let directoryObjectUUID: UUID?
+  private let onDisappear: ((CollectionViewLayoutStyle) -> Void)?
   private var requestsManager: NetworkManager
   private var collectionViewLayoutStyle: CollectionViewLayoutStyle
 
-  init(collectionViewLayoutStyle: CollectionViewLayoutStyle, requestsManager: NetworkManager, directoryObjectUUID: UUID?, dataContainer: DirectoryDataContainer) {
+  init(collectionViewLayoutStyle: CollectionViewLayoutStyle, requestsManager: NetworkManager, directoryObjectUUID: UUID?, dataContainer: DirectoryDataContainer, onDisappear: ((CollectionViewLayoutStyle) -> Void)?) {
     self.collectionViewLayoutStyle = collectionViewLayoutStyle
     self.fileTreeControllerView = FileTreeControllerView(collectionViewLayoutStyle:
                                                           collectionViewLayoutStyle)
     self.requestsManager = requestsManager
     self.directoryObjectUUID = directoryObjectUUID
     self.dataContainer = dataContainer
+    self.onDisappear = onDisappear
     super.init(nibName: nil, bundle: nil)
   }
 
@@ -53,6 +55,11 @@ final class FileTreeController: UIViewController {
     }
   }
 
+  override func viewWillDisappear(_ animated: Bool) {
+    super.viewWillDisappear(animated)
+    onDisappear?(collectionViewLayoutStyle)
+  }
+
 }
 
 extension FileTreeController {
@@ -62,9 +69,16 @@ extension FileTreeController {
   }
 
   private func setupNavbar() {
-    title = "Title"
+    title = getTitle(for: directoryObjectUUID)
     navigationItem.backButtonTitle = ""
     setBarButtonItems()
+  }
+
+  private func getTitle(for id: UUID?) -> String {
+    let selectedItem = dataContainer.collectionData.first { object in
+      object.uuid == id?.uuidString
+    }
+    return selectedItem?.itemName ?? "Root"
   }
 
   private func setBarButtonItems() {
@@ -160,11 +174,17 @@ extension FileTreeController: UICollectionViewDataSource, UICollectionViewDelega
 
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     let selectedItem = itemsToShow[indexPath.row]
+    let updateLayoutStyle = { [weak self] (layoutStyle: CollectionViewLayoutStyle) -> Void in
+      if self?.collectionViewLayoutStyle != layoutStyle {
+        self?.changeLayout()
+      }
+    }
+
     if selectedItem.itemType == .directory {
       let controller = FileTreeController(collectionViewLayoutStyle: collectionViewLayoutStyle,
                                           requestsManager: requestsManager,
                                           directoryObjectUUID: UUID(uuidString: selectedItem.uuid),
-                                          dataContainer: dataContainer)
+                                          dataContainer: dataContainer, onDisappear: updateLayoutStyle)
 
       navigationController?.pushViewController(controller, animated: true)
     }
