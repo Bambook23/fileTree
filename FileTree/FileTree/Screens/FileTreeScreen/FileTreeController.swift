@@ -62,6 +62,8 @@ final class FileTreeController: UIViewController {
 
 }
 
+//MARK: Setup controller and nav bar
+
 extension FileTreeController {
 
   private func view() -> FileTreeControllerView {
@@ -149,6 +151,8 @@ extension FileTreeController {
 
 }
 
+// MARK: Collectionview UICollectionViewDataSource and UICollectionViewDelegate methods
+
 extension FileTreeController: UICollectionViewDataSource, UICollectionViewDelegate {
 
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -192,6 +196,8 @@ extension FileTreeController: UICollectionViewDataSource, UICollectionViewDelega
 
 }
 
+// MARK: DirectoryDataContainerDelegate conformance
+
 extension FileTreeController: DirectoryDataContainerDelegate {
 
   func didUpdataData(items: [DirectoryObject]) {
@@ -200,6 +206,8 @@ extension FileTreeController: DirectoryDataContainerDelegate {
   }
 
 }
+
+// MARK: Items manipulation methods
 
 extension FileTreeController {
 

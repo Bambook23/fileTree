@@ -22,6 +22,8 @@ protocol NetworkManager {
 
 }
 
+// table url: https://docs.google.com/spreadsheets/d/1zWXytT6zQE4LIp2WV2Gt1ZYzk7A98JLjsEvOuQDGkfM/edit?usp=sharing
+
 final class RequestsManager: NetworkManager {
 
   weak var delegate: NetworkManagerDelegate?
@@ -29,7 +31,7 @@ final class RequestsManager: NetworkManager {
   let networkService = APINetworkService()
 
   func getItems() {
-    let request = Request(method: .get, url: "https://sheetdb.io/api/v1/ijtc8qex0zds3")
+    let request = Request(method: .get, url: "https://sheetdb.io/api/v1/s7dqserrq6y3s")
     networkService.sendRequest(request: request, dataType: [DirectoryObject].self) { result in
       switch result {
       case .success(let items):
@@ -43,9 +45,24 @@ final class RequestsManager: NetworkManager {
   }
 
   func deleteItems(uuid: String, itemType: ItemType) {
-    if itemType == .directory {
+    let itemDeleteRequest = Request(method: .delete,
+                                    url: "https://sheetdb.io/api/v1/s7dqserrq6y3s/UUID/\(uuid)")
+    networkService.sendRequest(request: itemDeleteRequest, dataType: [String : Int].self) { result in
+      switch result {
+      case .success(let result):
+        print(result)
+        if itemType == .directory {
+          deleteChildren()
+        }
+        self.getItems()
+      case .failure(let error):
+        print(error)
+      }
+    }
+
+    func deleteChildren() {
       let childrenDeleteRequest = Request(method: .delete,
-                                          url: "https://sheetdb.io/api/v1/ijtc8qex0zds3/parentUUID/\(uuid)")
+                                          url: "https://sheetdb.io/api/v1/s7dqserrq6y3s/parentUUID/\(uuid)")
       networkService.sendRequest(request: childrenDeleteRequest, dataType: [String : Int].self) { result in
         switch result {
         case .success(let result):
@@ -53,18 +70,6 @@ final class RequestsManager: NetworkManager {
         case .failure(let error):
           print(error)
         }
-      }
-    }
-
-    let itemDeleteRequest = Request(method: .delete,
-                          url: "https://sheetdb.io/api/v1/ijtc8qex0zds3/UUID/\(uuid)")
-    networkService.sendRequest(request: itemDeleteRequest, dataType: [String : Int].self) { result in
-      switch result {
-      case .success(let result):
-        print(result)
-        self.getItems()
-      case .failure(let error):
-        print(error)
       }
     }
   }
@@ -76,7 +81,7 @@ final class RequestsManager: NetworkManager {
                                           "itemName": itemName]]]
     
     let request = Request(method: .post,
-                          url: "https://sheetdb.io/api/v1/ijtc8qex0zds3",
+                          url: "https://sheetdb.io/api/v1/s7dqserrq6y3s",
                           headers: ["Content-Type": "application/json"],
                           body: param)
 
