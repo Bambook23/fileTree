@@ -32,11 +32,11 @@ final class RequestsManager: NetworkManager {
 
   func getItems() {
     let request = Request(method: .get, url: "https://sheetdb.io/api/v1/s7dqserrq6y3s")
-    networkService.sendRequest(request: request, dataType: [DirectoryObject].self) { result in
+    networkService.sendRequest(request: request, dataType: [DirectoryObject].self) { [weak self] result in
       switch result {
       case .success(let items):
         DispatchQueue.main.async {
-          self.delegate?.didGetItems(items: items)
+          self?.delegate?.didGetItems(items: items)
         }
       case .failure(let error):
         print(error)
@@ -47,14 +47,14 @@ final class RequestsManager: NetworkManager {
   func deleteItems(uuid: String, itemType: ItemType) {
     let itemDeleteRequest = Request(method: .delete,
                                     url: "https://sheetdb.io/api/v1/s7dqserrq6y3s/UUID/\(uuid)")
-    networkService.sendRequest(request: itemDeleteRequest, dataType: [String : Int].self) { result in
+    networkService.sendRequest(request: itemDeleteRequest, dataType: [String : Int].self) { [weak self] result in
       switch result {
       case .success(let result):
         print(result)
         if itemType == .directory {
           deleteChildren()
         }
-        self.getItems()
+        self?.getItems()
       case .failure(let error):
         print(error)
       }
@@ -86,11 +86,11 @@ final class RequestsManager: NetworkManager {
                           body: param)
 
     networkService.sendRequest(request: request,
-                               dataType: [String: Int].self) { result in
+                               dataType: [String: Int].self) { [weak self] result in
       switch result {
       case .success(let result):
         print(result)
-        self.getItems()
+        self?.getItems()
         DispatchQueue.main.async {
           completion()
         }
