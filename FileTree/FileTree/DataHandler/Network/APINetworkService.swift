@@ -40,23 +40,21 @@ struct APINetworkService: NetworkService {
 
     print(remoteURL)
 
-    DispatchQueue.main.async {
-      URLSession.shared.dataTask(with: urlRequest) { data, response, error in
-        if let data = data {
-          do {
-            let decodedData = try JSONDecoder().decode(T.self, from: data)
-            completion(.success(decodedData))
-          } catch {
-            print(error)
-            completion(.failure(.decodingError))
-          }
-        } else {
-          completion(.failure(.unknown))
-          print(error ?? "")
-          print(response ?? "")
+    URLSession.shared.dataTask(with: urlRequest) { data, response, error in
+      if let data = data {
+        do {
+          let decodedData = try JSONDecoder().decode(T.self, from: data)
+          completion(.success(decodedData))
+        } catch {
+          print(error)
+          completion(.failure(.decodingError))
         }
-      }.resume()
-    }
+      } else {
+        completion(.failure(.unknown))
+        print(error ?? "")
+        print(response ?? "")
+      }
+    }.resume()
   }
 
 }
